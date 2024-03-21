@@ -1,6 +1,6 @@
 
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import os
 
 
@@ -37,6 +37,16 @@ def upload_file():
         filename = file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         return 'Fichier téléchargé avec succès'
+
+
+@app.route("/files", methods=["GET"])
+def list_files():
+    files = os.listdir(app.config["UPLOAD_FOLDER"])
+    data = {
+        "files": files
+    }
+    return jsonify(data)
+
 
 
 if __name__ == "__main__":
